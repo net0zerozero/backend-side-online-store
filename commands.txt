@@ -1,0 +1,13 @@
+poetry init
+poetry add djangorestframework
+django-admin startproject tutorial .
+django-admin startapp quickstart
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser --email admin@example.com --username admin
+python manage.py runserver
+exact =
+gt =
+lt =
+gte =
+lte =
