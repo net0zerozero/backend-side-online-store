@@ -12,6 +12,7 @@ django-cors-headers = "^3.14.0"
 django-filter = "^23.1"
 pillow = "^9.5.0"
 rest-framework-simplejwt = "^0.0.2"
+djangorestframework-simplejwt = "^5.2.2"
 
 
 [build-system]

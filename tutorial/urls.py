@@ -20,4 +20,5 @@ urlpatterns = [
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/wishlist/', views.WishListView.as_view(), name='wishlist'),
+    path('api/wishlist/<int:product_id>/', views.WishListView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
