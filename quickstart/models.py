@@ -96,3 +96,14 @@ class WishList(Model):
 
     class Meta:
         verbose_name_plural = 'WishLists'
+
+
+class Cart(Model):
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='cart')
+    product = models.ManyToManyField(Product, related_name='cart')
+
+    def __str__(self) -> str:
+        return self.user.name + " cart"
+
+    class Meta:
+        verbose_name_plural = 'Cart'

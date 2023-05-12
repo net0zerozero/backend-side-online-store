@@ -1,7 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Category, Product, WishList
+from .models import Category, Product, WishList, Cart
 from .serializers import CategorySerializer, ProductSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -66,4 +66,30 @@ class WishListView(APIView):
             return Response({'status': 'error', 'message': 'Product id is required'}, status=status.HTTP_400_BAD_REQUEST)
         wish_list = get_object_or_404(WishList, user=self.request.user)
         wish_list.product.remove(product_id)
+        return Response({'status': 'success'})
+    
+
+class CartView(APIView):
+    def get(self, request):
+        cart = Cart.objects.filter(user=self.request.user.id).values_list('product', flat=True)
+        return Response(cart)
+
+    def post(self, request):
+        product_id = request.data.get('product_id')
+        if not product_id:
+            return Response({'status': 'error', 'message': 'Product id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not Cart.objects.filter(user=self.request.user).exists():
+            cart = Cart.objects.create(user=self.request.user)
+            cart.product.add(product_id)
+        else:
+            cart = Cart.objects.get(user=self.request.user)
+            cart.product.add(product_id)
+        return Response({'status': 'success'})
+
+    def delete(self, request, product_id=None):
+        if product_id is None:
+            return Response({'status': 'error', 'message': 'Product id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        cart = get_object_or_404(Cart, user=self.request.user)
+        cart.product.remove(product_id)
         return Response({'status': 'success'})
