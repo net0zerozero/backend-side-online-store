@@ -68,5 +68,5 @@ To start the development server, run the following command:
 python manage.py runserver
 ```
 
-The development server will start running at http://localhost:8000.
+after that run this - [Frontend](https://github.com/net0zerozero/Frontend-side-of-the-online-store), then open browser - type - http://localhost:5173
 
