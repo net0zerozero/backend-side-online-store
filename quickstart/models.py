@@ -12,8 +12,8 @@ def get_file_path(instance, filename):
 
 class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Создан в ")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлен в ')
 
     class Meta:
         abstract = True
@@ -30,11 +30,11 @@ class Category(BaseModel):
 
 
 class Product(BaseModel):
-    title = models.CharField(max_length=255)
-    price = models.IntegerField()
-    description = models.TextField()
-    image = models.ImageField(upload_to=get_file_path, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='products', null=True)
+    title = models.CharField(max_length=255, verbose_name='Название ')
+    price = models.IntegerField(verbose_name='Цена')
+    description = models.TextField(verbose_name="Описание ")
+    image = models.ImageField(upload_to=get_file_path, null=True, blank=True, verbose_name="Изображение ")
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='products', null=True, verbose_name="Категория ")
 
     def __str__(self) -> str:
         return self.title
