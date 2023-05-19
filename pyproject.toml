@@ -1,18 +1,26 @@
 [tool.poetry]
-name = "work first ddd"
+name = "backend side online store"
 version = "0.1.0"
 description = ""
-authors = ["Birzhan Kairatov <birgan2000@gmail.com>"]
+authors = ["Net_Zero <netrannetranner@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
+asgiref = "^3.6.0"
+django = "^4.2.1"
+django-cors-headers = "^4.0.0"
+django-filter = "^23.2"
 djangorestframework = "^3.14.0"
-django-cors-headers = "^3.14.0"
-django-filter = "^23.1"
-pillow = "^9.5.0"
-rest-framework-simplejwt = "^0.0.2"
 djangorestframework-simplejwt = "^5.2.2"
+pillow = "^9.5.0"
+pip = "^23.1.2"
+pyjwt = "^2.7.0"
+pytz = "^2023.3"
+rest-framework-simplejwt = "^0.0.2"
+setuptools = "^67.7.2"
+sqlparse = "^0.4.4"
+wheel = "^0.40.0"
 
 
 [build-system]

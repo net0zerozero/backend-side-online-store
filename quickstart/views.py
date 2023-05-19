@@ -2,12 +2,16 @@ from django.forms import ValidationError
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Category, Product, WishList, Cart
-from .serializers import CategorySerializer, ProductSerializer, UserSerializer
+from .serializers import CategorySerializer, ProductSerializer, UserSerializer, UserDetailSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
+
+
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -35,14 +39,40 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering = ['title']
     search_fields = ['title']
 
+
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if serializer.is_valid():
+            user = serializer.save()
+
+            # Generate tokens for the registered user
+            access_token = AccessToken.for_user(user)
+
+            # Include tokens in the response
+            response_data = {
+                'id': user.id,
+                'email': user.email,
+                'name': user.username,
+                'access_token': str(access_token),
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        serializer = UserDetailSerializer(user)
         return Response(serializer.data)
     
+
+
 class WishListView(APIView):
+    permission_classes = [IsAuthenticated]
        
     def get(self, request):
         wish_list = WishList.objects.filter(user=self.request.user.id).values_list('product', flat=True)
@@ -67,9 +97,12 @@ class WishListView(APIView):
         wish_list = get_object_or_404(WishList, user=self.request.user)
         wish_list.product.remove(product_id)
         return Response({'status': 'success'})
-    
+
+
+
 
 class CartView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         cart = Cart.objects.filter(user=self.request.user.id).values_list('product', flat=True)
         return Response(cart)
@@ -93,3 +126,12 @@ class CartView(APIView):
         cart = get_object_or_404(Cart, user=self.request.user)
         cart.product.remove(product_id)
         return Response({'status': 'success'})
+    
+
+
+
+
+
+
+
+

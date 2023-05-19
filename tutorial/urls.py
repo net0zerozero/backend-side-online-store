@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/wishlist/<int:product_id>/', views.WishListView.as_view()),
     path('api/cart/', views.CartView.as_view(), name='cart'),
     path('api/cart/<int:product_id>/', views.CartView.as_view()),
+    path('api/user/', views.UserView.as_view(), name='user'),  # Добавлен новый путь для получения информации о пользователе
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
